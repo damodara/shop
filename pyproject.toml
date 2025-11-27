@@ -1,7 +1,7 @@
 [project]
 name = "shop"
 version = "0.1.0"
-description = ""
+description = "Учимся создавать магазин"
 authors = [
     {name = "damodara",email = "jay108@mail.ru"}
 ]
