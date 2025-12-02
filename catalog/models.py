@@ -40,6 +40,7 @@ class Product(models.Model):
         help_text="Загрузите изображение продукта",
     )
     category = models.ForeignKey(
+        Category,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -48,7 +49,20 @@ class Product(models.Model):
         related_name="products",
     )
     price = models.DecimalField(
-        blank=True, null=True, verbose_name="Цена продукта", help_text="Введите цену"
+        blank=True,
+        null=True,
+        verbose_name="Цена продукта",
+        help_text="Введите цену",
+        max_digits=10,
+        decimal_places=2,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Продукт"
+        verbose_name_plural = "Продукты"
+        ordering = ("name", "category", "created_at", "updated_at", "price")
+
+    def __str__(self):
+        return self.name
