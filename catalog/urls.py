@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 
 from catalog.apps import CatalogConfig
 from catalog.views import contacts, home
