@@ -15,6 +15,7 @@
 				<h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
 				<p>{{ product.description | truncatechars:100}}</p>
 				<a class="btn btn-primary" href="{% url 'catalog:product-detail' product.pk %}">Посмотреть</a>
+				<a class="btn btn-primary" href="{% url 'catalog:product-update' product.pk %}">Редактировать</a>
 			</div>
 		</div>
 	</div>

@@ -2,14 +2,20 @@
 {% block content %}
 <div class="container">
 	<div class="row">
-        <div class="col">
+        <div class="col-7">
 	        <form class="row" method="post" enctype="multipart/form-data">
 		        <div class="card">
 			        <div class="card-body">
 				        {% csrf_token %}
 				        {{ form.as_p }}
 			        </div>
-			        <button type="submit" class="btn btn-primary">Создать</button>
+			        <button type="submit" class="btn btn-primary">
+				        {% if object %}
+				        Сохранить
+				        {% else %}
+				        Создать
+				        {% endif %}
+			        </button>
 		        </div>
 	        </form>
         </div>
