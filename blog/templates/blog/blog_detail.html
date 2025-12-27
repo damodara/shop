@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { color: #333; }
+        .meta { color: #666; font-size: 0.9em; margin-bottom: 20px; }
+        .content { line-height: 1.6; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 6px; }
+        .preview { margin: 20px 0; }
+        .preview img { max-width: 100%; height: auto; border-radius: 6px; }
+        .actions a { margin-right: 10px; color: #0066cc; text-decoration: none; }
+        .actions a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <div class="meta">
+        Дата: {{ post.created_at|date:"d.m.Y H:i" }} | Просмотров: {{ post.views_count }}
+    </div>
+
+    {% if post.preview %}
+        <div class="preview">
+            <img src="{{ post.preview.url }}" alt="Превью">
+        </div>
+    {% endif %}
+
+    <div class="content">
+        {{ post.content|linebreaks }}
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'blog:blog-update' post.pk %}">Редактировать</a>
+        <a href="{% url 'blog:blog-delete' post.pk %}">Удалить</a>
+        <a href="{% url 'blog:blog-list' %}">Назад к списку</a>
+    </div>
+</body>
+</html>

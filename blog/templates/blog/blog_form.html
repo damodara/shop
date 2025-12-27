@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if object %}Редактировать запись{% else %}Новая запись{% endif %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { color: #333; }
+        form { background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 6px; max-width: 600px; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; color: #333; }
+        input[type="text"], textarea, input[type="file"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .checkbox { margin: 10px 0; }
+        .submit-btn { margin-top: 15px; padding: 10px 15px; background: #0066cc; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        .submit-btn:hover { background: #0055aa; }
+        .back-link { display: inline-block; margin-top: 10px; color: #0066cc; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>{% if object %}Редактировать: {{ object.title }}{% else %}Создать новую запись{% endif %}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div>
+            <label for="{{ form.title.id_for_label }}">Заголовок:</label>
+            {{ form.title }}
+            {{ form.title.errors }}
+        </div>
+
+        <div>
+            <label for="{{ form.content.id_for_label }}">Содержимое:</label>
+            {{ form.content }}
+            {{ form.content.errors }}
+        </div>
+
+        <div>
+            <label for="{{ form.preview.id_for_label }}">Превью:</label>
+            {{ form.preview }}
+            {{ form.preview.errors }}
+            {% if object.preview %}
+                <p><img src="{{ object.preview.url }}" alt="Текущее превью" style="max-height: 100px; margin-top: 10px;"></p>
+            {% endif %}
+        </div>
+
+        <div class="checkbox">
+            {{ form.is_published }}
+            <label for="{{ form.is_published.id_for_label }}">Опубликовано</label>
+            {{ form.is_published.errors }}
+        </div>
+
+        <button type="submit" class="submit-btn">Сохранить</button>
+    </form>
+
+    <a href="{% url 'blog:blog-list' %}" class="back-link">Отмена</a>
+</body>
+</html>

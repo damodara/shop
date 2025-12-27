@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { color: #333; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 10px 0; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 6px; }
+        a { text-decoration: none; color: #0066cc; }
+        a:hover { text-decoration: underline; }
+        .create-btn { display: inline-block; margin: 20px 0; padding: 10px 15px; background: #0066cc; color: white; border-radius: 6px; }
+        .create-btn:hover { background: #0055aa; }
+    </style>
+</head>
+<body>
+    <h1>Блог</h1>
+
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'blog:blog-detail' post.pk %}"><strong>{{ post.title }}</strong></a><br>
+                <small>Опубликовано: {{ post.created_at|date:"d.m.Y H:i" }} | Просмотров: {{ post.views_count }}</small>
+            </li>
+        {% empty %}
+            <li>Записей пока нет.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'blog:blog-create' %}" class="create-btn">Новая запись</a>
+</body>
+</html>

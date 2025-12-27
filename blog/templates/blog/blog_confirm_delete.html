@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Удалить запись?</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { color: #333; }
+        p { background: #fff; padding: 15px; border: 1px solid #ddd; border-radius: 6px; }
+        .confirm-btn { padding: 10px 15px; background: #cc0000; color: white; text-decoration: none; border-radius: 6px; }
+        .confirm-btn:hover { background: #aa0000; }
+        .back-link { margin-left: 15px; color: #0066cc; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Удалить запись?</h1>
+    <p>
+        Вы уверены, что хотите удалить статью "<strong>{{ object.title }}</strong>"?
+        Это действие нельзя отменить.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="confirm-btn">Да, удалить</button>
+        <a href="{% url 'blog:blog-list' %}" class="back-link">Нет, отмена</a>
+    </form>
+</body>
+</html>
