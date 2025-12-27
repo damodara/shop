@@ -1,0 +1,23 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+<a class="btn btn-light mb-4 col-1" href="{% url 'catalog:product-create' %}">Создать</a>
+<div class="row text-center">
+
+	{% for product in object_list %}
+	<div class="col-3">
+		<div class="card mb-4 box-shadow">
+			<div class="card-header">
+				<img src="{{ product.product_image | media_filter }}" style="height: 100px" class="img-thumbnail">
+				<h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+			</div>
+			<div class="card-body">
+				<h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
+				<p>{{ product.description | truncatechars:100}}</p>
+				<a class="btn btn-primary" href="{% url 'catalog:product-detail' product.pk %}">Посмотреть</a>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
