@@ -66,3 +66,32 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Contacts(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название компании")
+    email = models.EmailField(verbose_name="Почта")
+    phone = models.CharField(max_length=10, verbose_name="Телефон")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.email} - {self.phone}"
+
+    class Meta:
+        verbose_name = "Контакт"
+        verbose_name_plural = "Контакты"
+
+
+class ClientMessage(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    phone = models.CharField(max_length=12, verbose_name="Телефон")
+    message = models.TextField(verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Отправлено")
+    is_answered = models.BooleanField(default=False, verbose_name="Рассмотрено")
+
+    def __str__(self) -> str:
+        return f"{self.name} - {self.phone}"
+
+    class Meta:
+        verbose_name = "Сообщение"
+        verbose_name_plural = "Сообщения"
+        ordering = ["created_at"]

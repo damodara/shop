@@ -1,21 +1,37 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
-from catalog.models import Product
-
-
-# Create your views here.
-def home(request):
-    products = Product.objects.all()
-    context = {"products": products}
-    return render(request, "product_list.html", context)
+from catalog.models import Product, ClientMessage
 
 
-def contacts(request):
-    if request.method == "POST":
-        name = request.POST.get("name")
-        phone = request.POST.get("phone")
-        message = request.POST.get("message")
+class ProductListView(ListView):
+    model = Product
 
-        return HttpResponse(f"Спасибо за сообщение, {name}!")
-    return render(request, "contacts.html")
+
+class ProductDetailView(DetailView):
+    model = Product
+
+
+
+class ContactsView(CreateView):
+    model = ClientMessage
+    fields = ["name", "phone", "message"]
+    template_name = "catalog/contacts_form.html"
+    success_url = reverse_lazy("catalog:contacts")
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    fields = ["name", "description", "product_image", "category", "price"]
+    success_url = reverse_lazy("catalog:product-list")
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    fields = ["name", "description", "product_image", "category", "price"]
+    success_url = reverse_lazy("catalog:product-list")
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    success_url = reverse_lazy("catalog:product-list")
