@@ -13,8 +13,15 @@ class StyleFormMixin:
 
 class ProductForm(StyleFormMixin, forms.ModelForm):
     FORBIDDEN_WORDS = [
-        "казино", "криптовалюта", "крипта", "биржа",
-        "дешево", "бесплатно", "обман", "полиция", "радар"
+        "казино",
+        "криптовалюта",
+        "крипта",
+        "биржа",
+        "дешево",
+        "бесплатно",
+        "обман",
+        "полиция",
+        "радар",
     ]
 
     class Meta:
@@ -27,7 +34,9 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             name_lower = name.lower()
             for word in self.FORBIDDEN_WORDS:
                 if word in name_lower:
-                    raise ValidationError(f"Название не может содержать слово '{word}'.")
+                    raise ValidationError(
+                        f"Название не может содержать слово '{word}'."
+                    )
         return name
 
     def clean_description(self):
@@ -36,7 +45,9 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
             description_lower = description.lower()
             for word in self.FORBIDDEN_WORDS:
                 if word in description_lower:
-                    raise ValidationError(f"Описание не может содержать слово '{word}'.")
+                    raise ValidationError(
+                        f"Описание не может содержать слово '{word}'."
+                    )
         return description
 
     def clean_price(self):

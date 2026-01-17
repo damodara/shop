@@ -1,6 +1,11 @@
 from django.urls import reverse, reverse_lazy
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
 from .models import BlogPost
 
@@ -24,7 +29,7 @@ class BlogPostDetailView(DetailView):
         """Увеличиваем счётчик просмотров при открытии статьи"""
         obj = super().get_object(queryset)
         obj.views_count += 1
-        obj.save(update_fields=['views_count'])
+        obj.save(update_fields=["views_count"])
         return obj
 
 
