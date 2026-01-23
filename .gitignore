@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.DS_Store
+*.pyc
 *.py[codz]
 *$py.class
 
@@ -136,10 +138,12 @@ celerybeat.pid
 
 # Environments
 .env
+.env.local
 .envrc
 .venv
 env/
 venv/
+.venv/
 ENV/
 env.bak/
 venv.bak/
