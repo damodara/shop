@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -33,24 +35,45 @@ class BlogPostDetailView(DetailView):
         return obj
 
 
-class BlogPostCreateView(CreateView):
+class BlogPostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = BlogPost
     template_name = "blog/blog_form.html"
     fields = ("title", "content", "preview", "is_published")
     success_url = reverse_lazy("blog:blog-list")
+    permission_required = "blog.add_blogpost"
+
+    def has_permission(self):
+        """Проверяем, что пользователь в группе Контент-менеджер"""
+        if not self.request.user.is_authenticated:
+            return False
+        return self.request.user.groups.filter(name="Контент-менеджер").exists()
 
 
-class BlogPostUpdateView(UpdateView):
+class BlogPostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = BlogPost
     template_name = "blog/blog_form.html"
     fields = ("title", "content", "preview", "is_published")
+    permission_required = "blog.change_blogpost"
+
+    def has_permission(self):
+        """Проверяем, что пользователь в группе Контент-менеджер"""
+        if not self.request.user.is_authenticated:
+            return False
+        return self.request.user.groups.filter(name="Контент-менеджер").exists()
 
     def get_success_url(self):
         """После редактирования — редирект на просмотр статьи"""
         return reverse("blog:blog-detail", kwargs={"pk": self.object.pk})
 
 
-class BlogPostDeleteView(DeleteView):
+class BlogPostDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = BlogPost
     template_name = "blog/blog_confirm_delete.html"
     success_url = reverse_lazy("blog:blog-list")
+    permission_required = "blog.delete_blogpost"
+
+    def has_permission(self):
+        """Проверяем, что пользователь в группе Контент-менеджер"""
+        if not self.request.user.is_authenticated:
+            return False
+        return self.request.user.groups.filter(name="Контент-менеджер").exists()

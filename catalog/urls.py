@@ -7,6 +7,7 @@ from catalog.views import (
     ProductDeleteView,
     ProductDetailView,
     ProductListView,
+    ProductUnpublishView,
     ProductUpdateView,
 )
 
@@ -21,6 +22,11 @@ urlpatterns = [
     ),
     path(
         "product/<int:pk>/delete/", ProductDeleteView.as_view(), name="product-delete"
+    ),
+    path(
+        "product/<int:pk>/unpublish/",
+        ProductUnpublishView.as_view(),
+        name="product-unpublish",
     ),
     path("contacts/", ContactsView.as_view(), name="contacts"),
 ]

@@ -16,9 +16,21 @@
 			<div class="card-body">
 				<h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
 				<p>{{ product.description | truncatechars:100}}</p>
+				{% if not product.is_published %}
+					<span class="badge bg-warning text-dark mb-2">Не опубликовано</span>
+				{% endif %}
 				<a class="btn btn-primary mb-4" href="{% url 'catalog:product-detail' product.pk %}">Посмотреть</a>
-				<a class="btn btn-outline-primary mb-4" href="{% url 'catalog:product-update' product.pk %}">Редактировать</a>
-				<a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+				{% if user.is_authenticated and product.owner == user %}
+					<a class="btn btn-outline-primary mb-4" href="{% url 'catalog:product-update' product.pk %}">Редактировать</a>
+					<a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+				{% endif %}
+				{% if user.is_authenticated %}
+					{% for group in user.groups.all %}
+						{% if group.name == "Модератор продуктов" %}
+							<a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
