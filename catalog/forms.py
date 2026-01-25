@@ -28,7 +28,22 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["name", "description", "product_image", "category", "price", "is_published"]
+        exclude = ["owner", "created_at", "updated_at"]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        super().__init__(*args, **kwargs)
+        
+        # Показываем поле is_published только владельцу продукта
+        if self.instance and self.instance.pk:
+            # Редактирование существующего продукта
+            if not (self.user and self.instance.owner == self.user):
+                # Если пользователь не владелец, скрываем поле is_published
+                self.fields.pop("is_published", None)
+        else:
+            # Создание нового продукта - скрываем is_published (по умолчанию False)
+            self.fields.pop("is_published", None)
 
     def clean_name(self):
         name = self.cleaned_data.get("name")
