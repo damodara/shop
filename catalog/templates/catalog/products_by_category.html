@@ -1,0 +1,43 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Продукты в категории: {{ category.name }}</h2>
+    {% if category.description %}
+        <p class="text-muted mb-4">{{ category.description }}</p>
+    {% endif %}
+    
+    {% if products %}
+        <div class="row text-center">
+            {% for product in products %}
+            <div class="col-3">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-header">
+                        <img src="{{ product.product_image | media_filter }}" style="height: 100px" class="img-thumbnail">
+                        <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
+                        <p>{{ product.description | truncatechars:100}}</p>
+                        {% if not product.is_published %}
+                            <span class="badge bg-warning text-dark mb-2">Не опубликовано</span>
+                        {% endif %}
+                        <a class="btn btn-primary mb-4" href="{% url 'catalog:product-detail' product.pk %}">Посмотреть</a>
+                        {% if user.is_authenticated and product.owner == user %}
+                            <a class="btn btn-outline-primary mb-4" href="{% url 'catalog:product-update' product.pk %}">Редактировать</a>
+                            <a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            В этой категории пока нет продуктов.
+        </div>
+    {% endif %}
+    
+    <a class="btn btn-secondary" href="{% url 'catalog:product-list' %}">Вернуться к списку всех продуктов</a>
+</div>
+{% endblock %}

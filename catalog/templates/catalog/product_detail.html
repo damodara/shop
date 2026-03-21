@@ -1,0 +1,41 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row text-center">
+        <div class="col-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <img src="{{ object.product_image | media_filter }}" style="height: 200px" class="img-thumbnail">
+                    <h4 class="my-0 font-weight-normal">{{ object.name }}</h4>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">{{ object.price }} ₽</h1>
+                    <p>{{ object.description}}</p>
+                    {% if not object.is_published %}
+                        <span class="badge bg-warning text-dark mb-2">Не опубликовано</span>
+                    {% endif %}
+                    <div class="mt-3">
+                        <a class="btn btn-primary" href="{% url 'catalog:product-list' %}">Назад</a>
+                        {% if user.is_authenticated and object.owner == user %}
+                            <a class="btn btn-outline-primary" href="{% url 'catalog:product-update' object.pk %}">Редактировать</a>
+                            <a class="btn btn-danger" href="{% url 'catalog:product-delete' object.pk %}">Удалить</a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            {% for group in user.groups.all %}
+                                {% if group.name == "Модератор продуктов" %}
+                                    <a class="btn btn-danger" href="{% url 'catalog:product-delete' object.pk %}">Удалить</a>
+                                    {% if object.is_published and perms.catalog.can_unpublish_product %}
+                                        <form method="post" action="{% url 'catalog:product-unpublish' object.pk %}" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-warning">Отменить публикацию</button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

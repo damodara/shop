@@ -1,0 +1,39 @@
+{% extends 'catalog/base.html' %}
+{% load my_tags %}
+{% block content %}
+{% if user.is_authenticated %}
+<a class="btn btn-light mb-4 col-1" href="{% url 'catalog:product-create' %}">Создать</a>
+{% endif %}
+<div class="row text-center">
+
+	{% for product in object_list %}
+	<div class="col-3">
+		<div class="card mb-4 box-shadow">
+			<div class="card-header">
+				<img src="{{ product.product_image | media_filter }}" style="height: 100px" class="img-thumbnail">
+				<h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+			</div>
+			<div class="card-body">
+				<h1 class="card-title pricing-card-title">{{ product.price }} ₽</h1>
+				<p>{{ product.description | truncatechars:100}}</p>
+				{% if not product.is_published %}
+					<span class="badge bg-warning text-dark mb-2">Не опубликовано</span>
+				{% endif %}
+				<a class="btn btn-primary mb-4" href="{% url 'catalog:product-detail' product.pk %}">Посмотреть</a>
+				{% if user.is_authenticated and product.owner == user %}
+					<a class="btn btn-outline-primary mb-4" href="{% url 'catalog:product-update' product.pk %}">Редактировать</a>
+					<a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+				{% endif %}
+				{% if user.is_authenticated %}
+					{% for group in user.groups.all %}
+						{% if group.name == "Модератор продуктов" %}
+							<a class="btn btn-danger mb-4" href="{% url 'catalog:product-delete' product.pk %}">Удалить</a>
+						{% endif %}
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
